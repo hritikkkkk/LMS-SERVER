@@ -60,4 +60,21 @@ const getAllCourse = async (req, res) => {
     return res.status(error.statusCode).json(ErrorResponse);
   }
 };
-module.exports = { AddCourse, updateCourse, deleteCourse, getAllCourse };
+const getCourse = async (req, res) => {
+  try {
+    const response = await CourseService.getCourse(req.params.id);
+    SuccessResponse.data = response;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+};
+
+module.exports = {
+  AddCourse,
+  updateCourse,
+  deleteCourse,
+  getAllCourse,
+  getCourse,
+};

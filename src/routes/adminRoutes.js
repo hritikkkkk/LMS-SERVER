@@ -14,6 +14,8 @@ router.post(
 
 router.get("/courses", CourseController.getAllCourse);
 
+router.get("/course/:id", CourseController.getCourse);
+
 router.put(
   "/courses/:id",
   authenticate,

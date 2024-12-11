@@ -83,7 +83,7 @@ const updateCourse = async (id, data, userId) => {
 const deleteCourse = async (id, userId) => {
   try {
     const course = await courseRepo.getOne(id);
-    console.log(course.createdBy)
+    console.log(course.createdBy);
     console.log(userId);
     if (course.createdBy != userId) {
       throw new AppError(
@@ -129,4 +129,27 @@ const getAllCourses = async () => {
   }
 };
 
-module.exports = { addCourse, updateCourse, deleteCourse, getAllCourses };
+const getCourse = async (id) => {
+  try {
+    const courses = await courseRepo.getOne(id);
+
+    return {
+      status: StatusCodes.OK,
+      message: "Courses fetched successfully",
+      courses,
+    };
+  } catch (error) {
+    throw new AppError(
+      "Failed to fetch courses due to server error",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+};
+
+module.exports = {
+  addCourse,
+  updateCourse,
+  deleteCourse,
+  getAllCourses,
+  getCourse,
+};

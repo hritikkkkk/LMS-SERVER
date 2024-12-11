@@ -17,8 +17,6 @@ const authenticate = (req, res, next) => {
 const authorizeRole = (requiredRole) => {
   return (req, res, next) => {
     try {
-      console.log(req.user.role)
-      console.log(requiredRole);
       // Check if user's role matches the required role
       if (req.user.role !== requiredRole) {
         return res.status(403).json({

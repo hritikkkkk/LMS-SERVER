@@ -18,7 +18,6 @@ courseSchema.pre("findOneAndDelete", async function (next) {
   try {
     const courseId = this.getQuery()._id;
     const User = mongoose.model("User");
-
     await User.updateMany(
       { enrolledCourses: courseId },
       { $pull: { enrolledCourses: courseId } }
