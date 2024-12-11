@@ -6,9 +6,12 @@ const courseRepo = new courseRepository();
 
 const addCourse = async (data) => {
   try {
-    const { title, description, duration, instructor } = data;
+    const { userId, title, description, duration, instructor } = data;
 
-    // Input Validation
+    if (!userId) {
+      throw new AppError("User ID is required", StatusCodes.BAD_REQUEST);
+    }
+
     if (!title || !description || !duration || !instructor) {
       throw new AppError(
         "All course fields (title, description, duration, instructor) are required",
@@ -16,7 +19,14 @@ const addCourse = async (data) => {
       );
     }
 
-    const courseData = { title, description, duration, instructor };
+    const courseData = {
+      title,
+      description,
+      duration,
+      instructor,
+      createdBy: userId,
+    };
+
     const newCourse = await courseRepo.create(courseData);
 
     return {
@@ -36,8 +46,16 @@ const addCourse = async (data) => {
 };
 
 // Update a Course
-const updateCourse = async (id, data) => {
+const updateCourse = async (id, data, userId) => {
   try {
+    const course = await courseRepo.getOne(id);
+
+    if (course.createdBy != userId) {
+      throw new AppError(
+        "Unauthorized: You are not the owner of this course",
+        StatusCodes.FORBIDDEN
+      );
+    }
     const updatedCourse = await courseRepo.update(id, data);
 
     if (!updatedCourse) {
@@ -62,8 +80,17 @@ const updateCourse = async (id, data) => {
 };
 
 // Delete a Course
-const deleteCourse = async (id) => {
+const deleteCourse = async (id, userId) => {
   try {
+    const course = await courseRepo.getOne(id);
+    console.log(course.createdBy)
+    console.log(userId);
+    if (course.createdBy != userId) {
+      throw new AppError(
+        "Unauthorized: You are not the owner of this course",
+        StatusCodes.FORBIDDEN
+      );
+    }
     const deletedCourse = await courseRepo.destroy(id);
 
     if (!deletedCourse) {
@@ -84,7 +111,6 @@ const deleteCourse = async (id) => {
     );
   }
 };
-
 
 const getAllCourses = async () => {
   try {

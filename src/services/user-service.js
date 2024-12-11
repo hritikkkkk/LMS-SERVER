@@ -80,15 +80,14 @@ const userEnroll = async (data) => {
       );
     }
 
-      user.enrolledCourses.push(courseId);
-      
+    user.enrolledCourses.push(courseId);
+
     await user.save();
 
     return user;
   } catch (error) {
-    console.error("Error:", error);
     if (error instanceof AppError) {
-      return res.status(error.statusCode).json({ message: error.message });
+      throw error;
     }
     throw new AppError(
       "Failed to enroll courses due to server error",
