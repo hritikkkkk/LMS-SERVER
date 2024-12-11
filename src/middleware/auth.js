@@ -14,11 +14,23 @@ const authenticate = (req, res, next) => {
   }
 };
 
-const authorizeRoles = (roles) => (req, res, next) => {
-  if (!roles.includes(req.user.role)) {
-    return res.status(403).json({ message: "Access Denied" });
-  }
-  next();
+const authorizeRole = (requiredRole) => {
+  return (req, res, next) => {
+    try {
+      console.log(req.user.role)
+      console.log(requiredRole);
+      // Check if user's role matches the required role
+      if (req.user.role !== requiredRole) {
+        return res.status(403).json({
+          message: "Forbidden: You do not have access to this resource",
+        });
+      }
+      next();
+    } catch (error) {
+      console.error("Error in authorizeRole middleware:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
 };
 
-module.exports = { authenticate, authorizeRoles };
+module.exports = { authenticate, authorizeRole };

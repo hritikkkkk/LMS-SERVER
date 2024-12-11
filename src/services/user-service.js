@@ -24,9 +24,9 @@ const userAuthenticate = async (data) => {
 
     // Generate JWT Token
     const token = jwt.sign(
-      { userId: user.userId }, // Payload (can include additional info if needed)
-      ServerConfig.JWT_SECRET, // Secret key
-      { expiresIn: ServerConfig.JWT_EXPIRY } // Token expiration time
+      { userId: user.userId, role: user.role }, // Payload (can include additional info if needed)
+      ServerConfig.JWT_SECRET,
+      { expiresIn: ServerConfig.JWT_EXPIRY }
     );
 
     // Return user details and token
