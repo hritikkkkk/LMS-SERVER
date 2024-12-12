@@ -16,6 +16,8 @@ router.get("/courses", CourseController.getAllCourse);
 
 router.get("/course/:id", CourseController.getCourse);
 
+router.get("/adminCourses",authenticate, CourseController.getAdminCourse);
+
 router.put(
   "/courses/:id",
   authenticate,

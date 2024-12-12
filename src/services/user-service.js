@@ -86,7 +86,7 @@ const userEnroll = async (data) => {
 
     return user;
   } catch (error) {
-    console.log(error)
+    console.log(error);
     if (error instanceof AppError) {
       throw error;
     }
@@ -97,7 +97,68 @@ const userEnroll = async (data) => {
   }
 };
 
+const checkEnroll = async (userId, courseId) => {
+  try {
+    if (!userId || !courseId) {
+      throw new AppError(
+        "UserId and CourseId are required",
+        StatusCodes.BAD_REQUEST
+      );
+    }
+    const user = await userRepo.existingUser(userId);
+    if (!user) {
+      throw new AppError(
+        "No user found for the given userId",
+        StatusCodes.NOT_FOUND
+      );
+    }
+
+    const isEnrolled = user.enrolledCourses.includes(courseId);
+
+    return isEnrolled;
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(
+      "Failed to check enroll courses due to server error",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+};
+
+const enrolledCourses = async (userId) => {
+  try {
+    if (!userId) {
+      throw new AppError("UserId are required", StatusCodes.BAD_REQUEST);
+    }
+
+    const user = await userRepo.existingUser(userId);
+
+    if (!user) {
+      throw new AppError(
+        "No user found for the given userId",
+        StatusCodes.NOT_FOUND
+      );
+    }
+
+    return user.populate("enrolledCourses");
+  } catch (error) {
+    console.log(error);
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(
+      "Failed to check enroll courses due to server error",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+};
+
 module.exports = {
   userAuthenticate,
   userEnroll,
+  checkEnroll,
+  enrolledCourses,
 };

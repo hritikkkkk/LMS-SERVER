@@ -71,10 +71,22 @@ const getCourse = async (req, res) => {
   }
 };
 
+const getAdminCourse = async (req, res) => {
+  try {
+    const response = await CourseService.getAdminCourse(req.user.userId);
+    SuccessResponse.data = response;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+};
+
 module.exports = {
   AddCourse,
   updateCourse,
   deleteCourse,
   getAllCourse,
   getCourse,
+  getAdminCourse,
 };

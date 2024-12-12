@@ -28,7 +28,33 @@ const userEnroll = async (req, res) => {
     return res.status(error.statusCode).json(ErrorResponse);
   }
 };
+
+const checkEnroll = async (req, res) => {
+  try {
+    const { userId, courseId } = req.query;
+    const response = await UserService.checkEnroll(userId, courseId);
+    SuccessResponse.data = response;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+};
+
+const enrolledCourses = async (req, res) => {
+  try {
+    const response = await UserService.enrolledCourses(req.user.userId);
+    SuccessResponse.data = response;
+    return res.status(StatusCodes.OK).json(SuccessResponse);
+  } catch (error) {
+    ErrorResponse.error = error;
+    return res.status(error.statusCode).json(ErrorResponse);
+  }
+};
+
 module.exports = {
   userLogin,
   userEnroll,
+  checkEnroll,
+  enrolledCourses,
 };

@@ -146,10 +146,25 @@ const getCourse = async (id) => {
   }
 };
 
+const getAdminCourse = async (userId) => {
+  try {
+    const userCourses = await courseRepo.AdminCourse(userId);
+
+    return userCourses;
+  } catch (error) {
+    console.log(error);
+    throw new AppError(
+      "Failed to fetch courses due to server error",
+      StatusCodes.INTERNAL_SERVER_ERROR
+    );
+  }
+};
+
 module.exports = {
   addCourse,
   updateCourse,
   deleteCourse,
   getAllCourses,
   getCourse,
+  getAdminCourse,
 };
