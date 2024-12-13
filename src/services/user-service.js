@@ -86,7 +86,6 @@ const userEnroll = async (data) => {
 
     return user;
   } catch (error) {
-    console.log(error);
     if (error instanceof AppError) {
       throw error;
     }
@@ -117,7 +116,6 @@ const checkEnroll = async (userId, courseId) => {
 
     return isEnrolled;
   } catch (error) {
-    console.log(error);
     if (error instanceof AppError) {
       throw error;
     }
@@ -145,7 +143,6 @@ const enrolledCourses = async (userId) => {
 
     return user.populate("enrolledCourses");
   } catch (error) {
-    console.log(error);
     if (error instanceof AppError) {
       throw error;
     }

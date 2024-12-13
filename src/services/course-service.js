@@ -68,7 +68,6 @@ const updateCourse = async (id, data, userId) => {
       course: updatedCourse,
     };
   } catch (error) {
-    console.log(error);
     if (error instanceof AppError) throw error;
 
     console.error("Error updating course:", error);
@@ -83,8 +82,6 @@ const updateCourse = async (id, data, userId) => {
 const deleteCourse = async (id, userId) => {
   try {
     const course = await courseRepo.getOne(id);
-    console.log(course.createdBy);
-    console.log(userId);
     if (course.createdBy != userId) {
       throw new AppError(
         "Unauthorized: You are not the owner of this course",
@@ -152,7 +149,6 @@ const getAdminCourse = async (userId) => {
 
     return userCourses;
   } catch (error) {
-    console.log(error);
     throw new AppError(
       "Failed to fetch courses due to server error",
       StatusCodes.INTERNAL_SERVER_ERROR
